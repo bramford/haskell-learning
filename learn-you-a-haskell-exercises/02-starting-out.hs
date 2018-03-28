@@ -14,43 +14,60 @@ penultimate l = last (init l)
 
 -- Find the element at index k in list l
 -- For example: "findK 2 [0,0,1,0,0,0]" returns 1
-findK k l = undefined
+findK _ [] = error" findK: empty list"
+findK 0 (x:_) = x
+findK n (_:xs) = findK (n - 1) xs
+{-
+-- Alternate pattern-matching syntax using `case`:
+findK n l = case (n,l) of
+    (_,[]) -> error" findK: empty list"
+    (0,x:_) -> x
+    (n,_:xs) -> findK (n - 1) xs
+-}
 
 -- Determine if list l is a palindrome
-isPalindrome l = undefined
+isPalindrome l = l == (reverse l)
 
 {-
  - Duplicate the elements in list xs, for example "duplicate [1,2,3]" would give the list [1,1,2,2,3,3]
- - Hint: The "concat [l]" function flattens a list of lists into a single list. 
+ - Hint: The "concat [l]" function flattens a list of lists into a single list.
  - (You can see the function definition by typing ":t concat" into the interpreter. Perhaps try this with other variables and functions)
  -
  - For example: concat [[1,2,3],[3,4,5]] returns [1,2,3,3,4,5]
  -}
-duplicate xs = undefined
+duplicate xs = [ [i,i] | i <- xs ]
 
 {-
  - Imitate the functinality of zip
  - The function "min x y" returns the lower of values x and y
  - For example "ziplike [1,2,3] ['a', 'b', 'c', 'd']" returns [(1,'a'), (2, 'b'), (3, 'c')]
  -}
-ziplike xs ys = undefined
+ziplike [] _ = []
+ziplike _ [] = []
+ziplike (a:as) (b:bs) = (a,b) : ziplike as bs
 
 -- Split a list l at element k into a tuple: The first part up to and including k, the second part after k
 -- For example "splitAtIndex 3 [1,1,1,2,2,2]" returns ([1,1,1],[2,2,2])
-splitAtIndex k l = undefined
+splitAtIndex k l = (take k l,drop k l)
 
 -- Drop the element at index k in list l
 -- For example "dropK 3 [0,0,0,1,0,0,0]" returns [0,0,0,0,0,0]
-dropK k l = undefined
+---dropK k l =
+dropK 0 (x:xs) = xs
+dropK n (x:xs) = x : dropK (n - 1) xs
+dropK _ ([]) = []
 
 -- Extract elements between ith and kth element in list l. Including i, but not k
 -- For example, "slice 3 6 [0,0,0,1,2,3,0,0,0]" returns [1,2,3]
-slice i k l = undefined
+--slice i k l =
+slice i k l = take (k - i) (drop i l)
 
 -- Insert element x in list l at index k
 -- For example, "insertElem 2 5 [0,0,0,0,0,0]" returns [0,0,0,0,0,2,0]
-insertElem x k l = undefined
+insertElem x 0 l = x : l
+insertElem x n (a:as) = a : insertElem x (n - 1) as
 
 -- Rotate list l n places left.
 -- For example, "rotate 2 [1,2,3,4,5]" gives [3,4,5,1,2]
-rotate n l = undefined
+rotate 0 l = l
+rotate n (x:xs) = rotate (n - 1) (xs ++ [x])
